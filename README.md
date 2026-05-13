@@ -4,6 +4,10 @@ Small TypeScript utility for extracting and validating CSS hex color tokens.
 
 It focuses on one job: find `#rgb`, `#rgba`, `#rrggbb`, and `#rrggbbaa` tokens in text, return source spans, normalize them, and explain malformed candidates without requiring Node APIs.
 
+## Demo
+
+[Try the interactive demo](https://packages.wasta-wocket.fr/hex-color-token-kit/)
+
 ## Install
 
 ```bash
