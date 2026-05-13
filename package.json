@@ -2,6 +2,17 @@
   "name": "hex-color-token-kit",
   "version": "0.1.0",
   "description": "Extract and validate CSS hex color tokens with spans and diagnostics.",
+  "keywords": [
+    "hex-color",
+    "css",
+    "colors",
+    "parser",
+    "validator",
+    "diagnostics",
+    "typescript",
+    "browser",
+    "developer-tools"
+  ],
   "type": "module",
   "sideEffects": false,
   "license": "MPL-2.0",
