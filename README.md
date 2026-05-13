@@ -13,7 +13,11 @@ npm install hex-color-token-kit
 ## Usage
 
 ```ts
-import { extractHexColorTokens, parseHexColorToken } from "hex-color-token-kit";
+import {
+  extractHexColorTokens,
+  isHexColorToken,
+  parseHexColorToken
+} from "hex-color-token-kit";
 
 const tokens = extractHexColorTokens("color: #0f38; border: #336699;");
 
@@ -25,6 +29,9 @@ tokens.invalid;
 
 parseHexColorToken("#abc");
 // { ok: true, value: { input: "#abc", normalized: "#aabbcc", channels: { r: 170, g: 187, b: 204 }, ... } }
+
+isHexColorToken("#336699");
+// true
 ```
 
 ## API
@@ -50,6 +57,11 @@ const result = extractHexColorTokens("ok #fff bad #12zzzz", {
 });
 ```
 
+### `isHexColorToken(input, options?)`
+
+Returns `true` when a single token is valid. Use it for lightweight checks when
+you do not need channels, normalized values, or diagnostics.
+
 ## Options
 
 - `allowAlpha`: accept 4-digit and 8-digit alpha forms. Defaults to `true`.
@@ -57,6 +69,10 @@ const result = extractHexColorTokens("ok #fff bad #12zzzz", {
 - `normalize`: return expanded lowercase hex values. Defaults to `true`.
 - `includeInvalid`: include malformed candidates found while scanning. Defaults to `true`.
 - `maxInputLength`: guard scanning work. Defaults to `100_000`.
+
+When `requireHash` is `false`, extraction also considers standalone 3-8 digit
+hex-like words. Keep the default for CSS text and enable loose matching only for
+inputs where bare color tokens are expected.
 
 ## Browser compatibility
 
