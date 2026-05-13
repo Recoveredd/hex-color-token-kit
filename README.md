@@ -1,8 +1,18 @@
 # hex-color-token-kit
 
+[![License: MPL-2.0](https://img.shields.io/badge/license-MPL--2.0-blue.svg)](LICENSE)
+[![CI](https://github.com/Recoveredd/hex-color-token-kit/actions/workflows/ci.yml/badge.svg)](https://github.com/Recoveredd/hex-color-token-kit/actions/workflows/ci.yml)
+
 Small TypeScript utility for extracting and validating CSS hex color tokens.
 
 It focuses on one job: find `#rgb`, `#rgba`, `#rrggbb`, and `#rrggbbaa` tokens in text, return source spans, normalize them, and explain malformed candidates without requiring Node APIs.
+
+## Package quality
+
+- TypeScript types are generated from the source.
+- ESM-only package marked as side-effect free for bundlers.
+- CI runs `npm ci`, `typecheck`, `build`, and `test`.
+- Tested on Node.js 20 and 22 with GitHub Actions.
 
 ## Demo
 
