@@ -1,5 +1,6 @@
 # hex-color-token-kit
 
+[![npm version](https://img.shields.io/npm/v/hex-color-token-kit.svg)](https://www.npmjs.com/package/hex-color-token-kit)
 [![License: MPL-2.0](https://img.shields.io/badge/license-MPL--2.0-blue.svg)](LICENSE)
 [![CI](https://github.com/Recoveredd/hex-color-token-kit/actions/workflows/ci.yml/badge.svg)](https://github.com/Recoveredd/hex-color-token-kit/actions/workflows/ci.yml)
 
