@@ -54,6 +54,7 @@ isHexColorToken("#336699");
 ### `parseHexColorToken(input, options?)`
 
 Validates one token. It returns a discriminated union instead of throwing.
+Non-string runtime input returns a `not_a_string` diagnostic.
 
 ```ts
 const result = parseHexColorToken("#ff8800", {
@@ -65,6 +66,7 @@ const result = parseHexColorToken("#ff8800", {
 ### `extractHexColorTokens(input, options?)`
 
 Scans text and returns valid and invalid token-like candidates with offsets.
+Non-string source text returns an empty result with a `not_a_string` diagnostic.
 
 ```ts
 const result = extractHexColorTokens("ok #fff bad #12zzzz", {
@@ -84,6 +86,8 @@ you do not need channels, normalized values, or diagnostics.
 - `normalize`: return expanded lowercase hex values. Defaults to `true`.
 - `includeInvalid`: include malformed candidates found while scanning. Defaults to `true`.
 - `maxInputLength`: guard scanning work. Defaults to `100_000`.
+
+Invalid `maxInputLength` values are ignored with an `invalid_options` diagnostic.
 
 When `requireHash` is `false`, extraction also considers standalone 3-8 digit
 hex-like words. Keep the default for CSS text and enable loose matching only for

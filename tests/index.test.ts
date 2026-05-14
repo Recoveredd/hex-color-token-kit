@@ -27,6 +27,11 @@ describe("parseHexColorToken", () => {
   });
 
   it("returns diagnostics for empty and malformed input", () => {
+    expect(parseHexColorToken(null)).toMatchObject({
+      ok: false,
+      issues: [{ code: "not_a_string" }]
+    });
+
     expect(parseHexColorToken("")).toMatchObject({
       ok: false,
       issues: [{ code: "empty" }]
@@ -84,6 +89,19 @@ describe("extractHexColorTokens", () => {
       expect.objectContaining({ code: "input_too_long" })
     ]);
     expect(result.valid).toHaveLength(1);
+  });
+
+  it("handles non-string source text and invalid runtime options", () => {
+    expect(extractHexColorTokens(null)).toMatchObject({
+      valid: [],
+      invalid: [],
+      truncated: false,
+      issues: [{ code: "not_a_string" }]
+    });
+
+    expect(extractHexColorTokens("#fff", { maxInputLength: Number.NaN }).issues).toEqual([
+      expect.objectContaining({ code: "invalid_options" })
+    ]);
   });
 
   it("does not match inside words or identifiers", () => {

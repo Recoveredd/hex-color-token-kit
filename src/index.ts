@@ -1,9 +1,11 @@
 export type HexColorIssueCode =
+  | "not_a_string"
   | "empty"
   | "missing_hash"
   | "invalid_length"
   | "invalid_character"
   | "alpha_not_allowed"
+  | "invalid_options"
   | "input_too_long";
 
 export interface HexColorIssue {
@@ -65,9 +67,13 @@ const HASHED_CANDIDATE_PATTERN = /#[^\s"'`;),\]}]+/g;
 const LOOSE_CANDIDATE_PATTERN = /#[^\s"'`;),\]}]+|[0-9a-fA-F]{3,8}/g;
 
 export function parseHexColorToken(
-  input: string,
+  input: unknown,
   options: HexColorParseOptions = {}
 ): HexColorParseResult {
+  if (typeof input !== "string") {
+    return fail("not_a_string", "Expected a CSS hex color token string.");
+  }
+
   const allowAlpha = options.allowAlpha ?? true;
   const requireHash = options.requireHash ?? true;
   const normalize = options.normalize ?? true;
@@ -135,10 +141,24 @@ export function parseHexColorToken(
 }
 
 export function extractHexColorTokens(
-  input: string,
+  input: unknown,
   options: HexColorExtractOptions = {}
 ): HexColorExtractResult {
-  const maxInputLength = options.maxInputLength ?? DEFAULT_MAX_INPUT_LENGTH;
+  const issues: HexColorIssue[] = [];
+
+  if (typeof input !== "string") {
+    return {
+      valid: [],
+      invalid: [],
+      truncated: false,
+      issues: [{
+        code: "not_a_string",
+        message: "Expected source text to be a string."
+      }]
+    };
+  }
+
+  const maxInputLength = normalizeMaxInputLength(options.maxInputLength, issues);
   const includeInvalid = options.includeInvalid ?? true;
   const truncated = input.length > maxInputLength;
   const scanInput = truncated ? input.slice(0, maxInputLength) : input;
@@ -148,7 +168,6 @@ export function extractHexColorTokens(
       : HASHED_CANDIDATE_PATTERN;
   const valid: HexColorToken[] = [];
   const invalid: HexColorInvalidToken[] = [];
-  const issues: HexColorIssue[] = [];
 
   if (truncated) {
     issues.push({
@@ -184,10 +203,26 @@ export function extractHexColorTokens(
 }
 
 export function isHexColorToken(
-  input: string,
+  input: unknown,
   options: HexColorParseOptions = {}
 ): boolean {
   return parseHexColorToken(input, options).ok;
+}
+
+function normalizeMaxInputLength(value: number | undefined, issues: HexColorIssue[]): number {
+  if (value === undefined) {
+    return DEFAULT_MAX_INPUT_LENGTH;
+  }
+
+  if (!Number.isInteger(value) || value < 0) {
+    issues.push({
+      code: "invalid_options",
+      message: "maxInputLength must be an integer greater than or equal to 0."
+    });
+    return DEFAULT_MAX_INPUT_LENGTH;
+  }
+
+  return value;
 }
 
 function fail(code: HexColorIssueCode, message: string): HexColorParseResult {
